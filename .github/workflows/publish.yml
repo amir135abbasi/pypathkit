@@ -1,36 +1,27 @@
-name: Publish Python Package
+name: Test Package
 
 on:
-  release:
-    types: [published]
-
-permissions:
-  contents: read
-  id-token: write
+  push:
+    branches:
+      - main
 
 jobs:
-  publish:
-    name: Build and publish
+  test:
     runs-on: ubuntu-latest
-
-    environment:
-      name: pypi
-      url: https://pypi.org/p/pypathkit
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Install build
-        run: python -m pip install --upgrade build
+      - name: Test Python
+        run: python --version
 
-      - name: Build package
-        run: python -m build
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Build Package
+        run: |
+          python -m pip install --upgrade build
+          python -m build
